@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Haushaltsbuch.View.LastTransactionsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Haushaltsbuch.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:converters="using:Haushaltsbuch.Converter"
+    xmlns:sys="using:System"
+    xmlns:models="using:Haushaltsbuch.Model"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:DateToStringConverter x:Key="DateToStringConverter" />
+        <converters:TransactionTypeToHexColorConverter x:Key="TransactionTypeToHexColorConverter" />
+    </UserControl.Resources>
+
+    <controls:DockPanel VerticalSpacing="10">
+        <TextBlock controls:DockPanel.Dock="Top" Text="Letzte 5 Transaktionen" FontWeight="SemiBold" FontSize="16" />
+
+        <ListView controls:DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" ItemsSource="{Binding LastTransactions}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Transaction">
+                    <controls:DockPanel>
+                        <StackPanel controls:DockPanel.Dock="Left">
+                            <TextBlock Text="{Binding Category.Name}" />
+                            <TextBlock Text="{Binding Date, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource LabelStyle}" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding FormattedAmount}" controls:DockPanel.Dock="Right" HorizontalTextAlignment="Right" VerticalAlignment="Center" Foreground="{Binding Type, Converter={StaticResource TransactionTypeToHexColorConverter}}" />
+                    </controls:DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Margin" Value="0 0 0 5" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+    </controls:DockPanel>
+</UserControl>
